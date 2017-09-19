@@ -1,0 +1,294 @@
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+class Board
+{
+private:
+	char R = 'R';
+	char B = 'B';
+	char O = 'O';
+	char D = 'D';
+	char U = 'U';
+	int i, p;
+	char input;
+	
+	char gameBoard[100][100] =
+	{
+		{ ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', },
+		{ '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', },
+		{ ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', },
+		{ '|', ' ', ' ', ' ', '|', ' ', 'R', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', },
+		{ ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', },
+		{ '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', },
+		{ ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', },
+		{ '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', 'B', ' ', '|', ' ', ' ', ' ', '|', ' ', },
+		{ ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', },
+		{ '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', ' ', ' ', '|', ' ', },
+		{ ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', '-', '-', '-', ' ', },
+		//HEIGHT 11, LENGTH 21
+		//R = [3][6], B = [6][14]
+	};
+public:
+	void printGameBoard()
+	{
+		cout << "Current game state: " << endl;
+		for (i = 0; i < 11; i++)
+		{
+			for (p = 0; p < 21; p++)
+			{
+				{
+					cout << gameBoard[i][p];
+				}
+			}
+			cout << endl;
+		}
+	}
+	
+	int playerMove(int& redHeight, int& redWidth, int& blueHeight, int& blueWidth, bool& testFailRed, bool& testFailBlue, bool& gameOver)
+	{
+		if (testFailRed == false && testFailBlue == false)
+		{
+			cout << "Type the direction you wish to move player red; U, D, L, R: " << endl;
+			cin >> input;
+			if (input != 'U' && input != 'D' && input != 'L' && input != 'R')
+			{
+				cout << "Wrong move, game over. Blue wins." << endl;
+				return 0;
+			}
+			else
+			{
+				switch (input)
+				{
+				case 'U':
+					gameBoard[redHeight][redWidth] = O;
+					redHeight = redHeight - 2;
+					if (redHeight < 0)
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[redHeight][redWidth] != O)
+					gameBoard[redHeight][redWidth] = R;
+					else 
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+					{
+						cout << "Game is a draw!" << endl;
+						gameOver = true;
+						break;
+					}
+					printGameBoard();
+					break;
+				case 'D':
+					gameBoard[redHeight][redWidth] = O;
+					redHeight = redHeight + 2;
+					if (redHeight > 10)
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[redHeight][redWidth] != O)
+					gameBoard[redHeight][redWidth] = R;
+					else
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+					{
+						cout << "Game is a draw!" << endl;
+						gameOver = true;
+						break;
+					}
+					printGameBoard();
+					break;
+				case 'L':
+					gameBoard[redHeight][redWidth] = O;
+					redWidth = redWidth - 4;
+					if (redWidth < 2)
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[redHeight][redWidth] != O)
+					gameBoard[redHeight][redWidth] = R;
+					else 
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+					{
+						cout << "Game is a draw!" << endl;
+						gameOver = true;
+						break;
+					}
+					printGameBoard();
+					break;
+				case 'R':
+					gameBoard[redHeight][redWidth] = O;
+					redWidth = redWidth + 4;
+					if (redWidth > 18)
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[redHeight][redWidth] != O)
+					gameBoard[redHeight][redWidth] = R;
+					else
+					{
+						testFailRed = true;
+						break;
+					}
+					if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+					{
+						cout << "Game is a draw!" << endl;
+						gameOver = true;
+						break;
+					}
+					printGameBoard();
+					break;
+				}
+				if (testFailRed == false && testFailBlue == false && gameOver == false)
+				{
+					cout << "Type the direction you wish to move player blue; U, D, L, R: " << endl;
+					cin >> input;
+					if (input != 'U' && input != 'D' && input != 'L' && input != 'R')
+					{
+						cout << "Wrong move, game over. Red wins." << endl;
+						return 0;
+					}
+					else
+					{
+						switch (input)
+						{
+						case 'U':
+							gameBoard[blueHeight][blueWidth] = O;
+							blueHeight = blueHeight - 2;
+							if (blueHeight < 0)
+							{ 
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] != O)
+								gameBoard[blueHeight][blueWidth] = B;
+							else
+							{
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+							{
+								cout << "Game is a draw!" << endl;
+								gameOver = true;
+								break;
+							}
+							printGameBoard();
+							break;
+						case 'D':
+							gameBoard[blueHeight][blueWidth] = O;
+							blueHeight = blueHeight + 2;
+							if (blueHeight > 10)
+							{
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] != O)
+							gameBoard[blueHeight][blueWidth] = B;
+							else
+							{
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+							{
+								cout << "Game is a draw!" << endl;
+								gameOver = true;
+								break;
+							}
+							printGameBoard();
+							break;
+						case 'L':
+							gameBoard[blueHeight][blueWidth] = O;
+							blueWidth = blueWidth - 4;
+							if (blueWidth < 0)
+							{
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] != O)
+							gameBoard[blueHeight][blueWidth] = B;
+							else
+							{
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+							{
+								cout << "Game is a draw!" << endl;
+								gameOver = true;
+								break;
+							}
+							printGameBoard();
+							break;
+						case 'R':
+							gameBoard[blueHeight][blueWidth] = O;
+							blueWidth = blueWidth + 4;
+							if (blueWidth > 18)
+							{
+								testFailBlue = true;
+								break;
+							}	
+							if (gameBoard[blueHeight][blueWidth] != O)
+								gameBoard[blueHeight][blueWidth] = B;
+							else
+							{
+								testFailBlue = true;
+								break;
+							}
+							if (gameBoard[blueHeight][blueWidth] == gameBoard[redHeight][redWidth])
+							{
+								cout << "Game is a draw!" << endl;
+								return 0;
+							}
+							printGameBoard();
+							break;
+						}
+					}
+				}
+				if (testFailRed == true || testFailBlue == true || gameOver == true )
+					{
+						if (testFailRed == true)
+							cout << "Game over! Blue wins!" << endl;
+						else if (testFailBlue == true)
+							cout << "Game over! Blue wins!" << endl;
+						return 0;
+					}
+					else
+						return redHeight, redWidth, blueHeight, blueWidth, testFailRed, testFailBlue;
+				}
+
+			}
+		}
+	};
+
+int main()
+{
+	Board d;
+	int redHeight = 3;
+	int	redWidth = 6;
+	int blueHeight = 7;
+	int	blueWidth = 14;
+	bool testFailRed = false;
+	bool testFailBlue = false;
+	bool gameOver = false;
+	d.printGameBoard();
+	do {
+		d.playerMove(redHeight, redWidth, blueHeight, blueWidth, testFailRed, testFailBlue, gameOver);
+	} while (testFailRed == false && testFailBlue == false && gameOver == false);
+	return 0;
+}
